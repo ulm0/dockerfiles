@@ -18,7 +18,7 @@ RUN apk --no-cache add \
     su-exec \
     tzdata && \
   mkdir -p /app/gitea && \
-  curl  -sSL https://github.com/go-gitea/gitea/releases/download/v${GITEA_VERSION}/gitea-${GITEA_VERSION}-linux-${GITEA_ARCH} -o /app/gitea/gitea && \
+  curl -sSL https://github.com/go-gitea/gitea/releases/download/v${GITEA_VERSION}/gitea-${GITEA_VERSION}-linux-${GITEA_ARCH} -o /app/gitea/gitea && \
   chmod +x /app/gitea/gitea
 
 RUN addgroup \
