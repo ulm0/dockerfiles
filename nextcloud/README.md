@@ -22,8 +22,9 @@
 - Environment variables provided (see below).
 
 ### Tags
-- **latest** : latest stable version. (12.0)
-- **12.0** : latest 12.0.x version (stable)
+- **latest** : latest stable version. (13.0)
+- **13.0** : latest 13.0.x version (stable)
+- **12.0** : latest 12.0.x version (old stable)
 - **11.0** : latest 11.0.x version (old stable)
 - **10.0** : latest 10.0.x version (old stable) (unmaintained)
 - **9.0** : latest 9.0.x version. (old stable) (unmaintained)
@@ -205,7 +206,7 @@ Redis can be used for distributed and file locking cache, alongside with APCu (l
 'redis' => array(
    'host' => 'redis',
    'port' => 6379,
-   ),
+   ),
 ```
 
 ### How to configure Nextant
@@ -219,7 +220,7 @@ Of course you can use your own solution! nginx, Haproxy, Caddy, h2o, Traefik...
 
 Whatever your choice is, you have to know that headers are already sent by the container, including HSTS, so there's no need to add them again. **It is strongly recommended (I'd like to say : MANDATORY) to use Nextcloud through an encrypted connection (HTTPS).** [Let's Encrypt](https://letsencrypt.org/) provides free SSL/TLS certificates, so you have no excuses.
 
-You can take a look at my brand new image [wonderfall/reverse](https://hub.docker.com/r/wonderfall/reverse/). It was made with security and ease-of-use in mind, using the latest versions of nginx and OpenSSL. It also provides SSL/TLS automation with [lego](https://github.com/xenolf/lego), a Let's Encrypt client. Also, no need to bother about configuration files! This image does litterally everything for you.
+You can take a look at [xataz/reverse-nginx](https://github.com/xataz/docker-reverse-nginx). It was made with security and ease-of-use in mind, using the latest versions of nginx and OpenSSL. It also provides SSL/TLS automation with [lego](https://github.com/xenolf/lego), a Let's Encrypt client. Also, no need to bother about configuration files! This image does litterally everything for you.
 
 Look at how simple it is. First, you have to add labels to your Nextcloud container, like this:
 
@@ -232,14 +233,14 @@ Look at how simple it is. First, you have to add labels to your Nextcloud contai
       - reverse.frontend.ssl=true
       - reverse.frontend.ssltype=ec384
       - reverse.frontend.hsts=false
-      - reverse.frontend.headers=false
+      - reverse.frontend.headers=false
 ```
 
 These labels can tell the reverse container what settings should be set when generating files/certificates for Nextcloud. Now you can add the reverse container in your docker-compose file, and you need to provide it your `EMAIL` (for Let's Encrypt), and bind it to the nextcloud container :
 
 ```
   reverse:
-    image: wonderfall/reverse
+    image: xataz/reverse-nginx
     container_name: reverse
     ports:
       - "80:8080"
@@ -250,7 +251,7 @@ These labels can tell the reverse container what settings should be set when gen
       - /docker/reverse/ssl:/nginx/ssl
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
-      - nextcloud
+      - nextcloud
 ```
 
-That's it! Did I lie to you?
+That's it! Enjoy.
