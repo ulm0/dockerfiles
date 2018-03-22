@@ -1,0 +1,70 @@
+platform: linux/amd64
+pipeline:
+  # restore-cache:
+  #   image: plugins/s3-cache:1
+  #   pull: true
+  #   secrets: [ aws_access_key_id, aws_secret_access_key ]
+  #   restore: true
+  reg-arm:
+    group: build
+    image: golang:alpine
+    environment:
+      - CGO=0
+      - GOOS=linux
+      - GOARCH=arm
+      - GOARM=7
+    commands:
+      - apk add --no-cache bash git build-base file make
+      - make dist
+      - mv bin/registry bin/registry-armv7
+    when:
+      platform: linux/amd64
+  reg-arm64:
+    group: build
+    image: golang:alpine
+    environment:
+      - CGO=0
+      - GOOS=linux
+      - GOARCH=arm64
+    commands:
+      - apk add --no-cache bash git build-base file make
+      - make dist
+      - mv bin/registry bin/registry-arm64
+    when:
+      platform: linux/amd64
+  reg-amd64:
+    group: build
+    image: golang:alpine
+    environment:
+      - CGO=0
+      - GOOS=linux
+      - GOARCH=amd64
+    commands:
+      - apk add --no-cache bash git build-base file make
+      - make dist
+      - mv bin/registry bin/registry-amd64
+    when:
+      platform: linux/amd64
+  rebuild-cache:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ aws_access_key_id, aws_secret_access_key ]
+    rebuild: true
+    mount:
+      - bin/
+  flush_cache:
+    image: plugins/s3-cache:1
+    pull: true
+    secrets: [ aws_access_key_id, aws_secret_access_key ]
+    flush: true
+    flush_age: 14
+  # frontend:
+  #   group: build
+  #   image: node
+  #   commands:
+  #     - npm install
+  #     - npm run test
+  #     - npm run build
+  # publish:
+  #   image: plugins/docker
+  #   repo: octocat/hello-world
