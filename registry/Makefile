@@ -20,14 +20,13 @@ compress:
 docker: image push
 
 image: compress
-	docker build -t $(DOCKER_IMAGE_NAME) .
-	docker tag $(DOCKER_IMAGE_NAME) $(DOCKER_IMAGE_TAGNAME)
+	docker build -t $(DOCKER_IMAGE_TAGNAME)-$(REG_ARCH) .
 
 clean:
 	rm -rf ./bin
 
 push:
-	docker push $(DOCKER_IMAGE_NAME)
+	docker push $(DOCKER_IMAGE_TAGNAME)-$(REG_ARCH)
 
 test:
-	docker run --rm $(DOCKER_IMAGE_NAME) --version
+	docker run --rm $(DOCKER_IMAGE_TAGNAME)-$(REG_ARCH) --version

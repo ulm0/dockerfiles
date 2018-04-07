@@ -4,8 +4,8 @@ set -eo pipefail
 
 go get -d -v github.com/docker/distribution/cmd/registry
 cd ${GOPATH}/src/github.com/docker/distribution
-git checkout v2.6.2
-sed -i -e 's/=\$(VERSION)"/=\$(VERSION) -s -w" -a/g' Makefile
+git checkout ${REG_VER}
+sed -i -e 's/=\$(VERSION)"/=\$(VERSION) -s -w" -installsuffix cgo -a/g' Makefile
 make binaries
 file bin/registry
 cd -
