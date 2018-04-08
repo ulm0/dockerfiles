@@ -1,9 +1,13 @@
 FROM alpine:edge
 
-RUN wget --quiet https://binaries.cockroachdb.com/cockroach-v1.1.6.linux-musl-amd64.tgz -O /tmp/cockroach.tgz && \
+ARG DB_VER
+ENV DB_VER=${DB_VER:-v1.1.6}
+
+RUN wget --quiet https://binaries.cockroachdb.com/cockroach-${DB_VER}.linux-musl-amd64.tgz -O /tmp/cockroach.tgz && \
     tar xvzf /tmp/cockroach.tgz --strip 1 && \
-    apk add --no-cache upx && \
-    upx --ultra-brute -qq cockroach
+    apk add --no-cache file upx && \
+    file cockroach && \
+    upx --best -qq cockroach
     
 FROM scratch
 ENV COCKROACH_CHANNEL=official-docker
