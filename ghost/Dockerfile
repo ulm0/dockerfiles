@@ -1,7 +1,7 @@
 FROM alpine:3.7
-
+LABEL description="Ghost CMS ${VERSION}" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 ARG VERSION=1.22.1
-
 ENV GHOST_NODE_VERSION_CHECK=false \
     NODE_ENV=production \
     GID=991 UID=991 \
@@ -10,9 +10,7 @@ ENV GHOST_NODE_VERSION_CHECK=false \
     ISSO_HOST=isso.domain.tld \
     ISSO_AVATAR=false \
     ISSO_VOTE=false
-
 WORKDIR /ghost
-
 RUN apk -U upgrade \
  && apk add -t build-dependencies \
     python-dev \
@@ -34,17 +32,9 @@ RUN apk -U upgrade \
  && mv content/themes/casper casper \
  && apk del build-dependencies \
  && rm -rf /tmp/* /var/cache/apk/*
-
 COPY rootfs /
-
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
-
 EXPOSE 2368
-
 VOLUME /ghost/content
-
-LABEL description="Ghost CMS ${VERSION}" \
-      maintainer="Wonderfall <wonderfall@targaryen.house>"
-
 ENTRYPOINT ["run.sh"]
 CMD ["/bin/s6-svscan", "/etc/s6.d"]
