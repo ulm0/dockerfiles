@@ -1,0 +1,24 @@
+FROM ubuntu:16.04
+ENV LANG C.UTF-8
+RUN apt-get update && \ 
+    DEBIAN_FRONTEND=noninteractive \
+    apt-get install -y --no-install-recommends \
+    bzip2 \
+    ca-certificates \
+    curl \
+    unzip \
+    git \
+    ssh \
+    xz-utils && \
+    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+    curl -sSL 'https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xC2518248EEA14886' -o key.txt && \
+    apt-key add key.txt && \
+    rm -f key.txt && \
+    echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" >> /etc/apt/sources.list && \
+    echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y oracle-java8-installer oracle-java8-set-default ca-certificates-java && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends maven gradle && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /var/cache/oracle-jdk8-installer
