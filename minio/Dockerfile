@@ -8,7 +8,7 @@ ENV CGO_ENABLED=${CGO_ENABLED:-0} \
     GOOS=${GOOS:-linux} \
     GOPATH=/go \
     PATH=$PATH:$GOPATH/bin \
-    RELEASE=${RELEASE:-}
+    RELEASE=${RELEASE:-master}
 WORKDIR /go/src/github.com/minio/
 RUN apk add --no-cache ca-certificates curl && \
     apk add --no-cache --virtual .build-deps git && \

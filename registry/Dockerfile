@@ -1,4 +1,4 @@
-FROM golang:1.9-alpine
+FROM golang:1.10.1-alpine3.7
 COPY . /registry
 WORKDIR /registry
 ARG GOARCH
@@ -15,6 +15,7 @@ RUN apk add --no-cache bash git build-base file make && \
 
 FROM scratch
 COPY --from=0 /registry/bin/registry /bin/registry
+ADD https://raw.githubusercontent.com/containous/traefik/master/script/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY etc/ /etc
 VOLUME ["/var/lib/registry/"]
 EXPOSE 5000
