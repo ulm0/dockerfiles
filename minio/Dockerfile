@@ -18,17 +18,17 @@ RUN apk add --no-cache ca-certificates curl && \
     go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
     rm -rf /go/pkg /go/src /usr/local/go && apk del .build-deps
 
-FROM alpine:3.7
+# FROM alpine:3.7
 # FROM multiarch/alpine:armhf-v3.7
-# FROM multiarch/alpine:arm64-v3.7
+FROM multiarch/alpine:arm64-v3.7
 COPY docker-entrypoint.sh healthcheck.sh /usr/bin/
 ENV MINIO_UPDATE=off \
     MINIO_ACCESS_KEY_FILE=access_key \
     MINIO_SECRET_KEY_FILE=secret_key \
     PATH=$PATH:/go/bin
-COPY --from=0 /go/bin/minio /go/bin/minio
+# COPY --from=0 /go/bin/minio /go/bin/minio
 # COPY --from=0 /go/bin/linux_arm/minio /go/bin/minio
-# COPY --from=0 /go/bin/linux_arm64/minio /go/bin/minio
+COPY --from=0 /go/bin/linux_arm64/minio /go/bin/minio
 RUN chmod +x /go/bin/minio && \
     apk add --no-cache ca-certificates curl && \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf
