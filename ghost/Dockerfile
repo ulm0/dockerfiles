@@ -1,7 +1,5 @@
-FROM alpine:3.7
-LABEL description="Ghost CMS ${VERSION}" \
-      maintainer="Wonderfall <wonderfall@targaryen.house>"
-ARG VERSION=1.22.1
+FROM alpine:3.8
+ARG VERSION=1.24.9
 ENV GHOST_NODE_VERSION_CHECK=false \
     NODE_ENV=production \
     GID=991 UID=991 \
@@ -36,5 +34,7 @@ COPY rootfs /
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 EXPOSE 2368
 VOLUME /ghost/content
+LABEL description="Ghost CMS ${VERSION}" \
+      maintainer="Wonderfall <wonderfall@targaryen.house>"
 ENTRYPOINT ["run.sh"]
 CMD ["/bin/s6-svscan", "/etc/s6.d"]
