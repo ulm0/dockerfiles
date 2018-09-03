@@ -1,0 +1,16 @@
+FROM debian:jessie-slim
+ENV OVFTOOL_FILENAME=VMware-ovftool-4.1.0-2459827-lin.x86_64.bundle
+ADD https://s.ulm0.xyz/packer/$OVFTOOL_FILENAME /tmp/$OVFTOOL_FILENAME
+ADD https://s.ulm0.xyz/packer/packer-ld /bin/packer
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    apt-get install -y \
+    bash \
+    git \
+    openssl \
+    wget && \
+    rm -rf /var/lib/apt/lists/* && \
+    chmod +x /tmp/$OVFTOOL_FILENAME && \
+    /bin/sh /tmp/$OVFTOOL_FILENAME --console --required --eulas-agreed && \
+    rm -f /tmp/$OVFTOOL_FILENAME && \
+    chmod +x /bin/packer
+ENTRYPOINT ["/bin/packer"]
