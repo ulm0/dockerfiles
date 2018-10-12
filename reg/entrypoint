@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+if [ "${CLAIR}" = "true" ] && [ "${CLAIR_SERVER}" != "" ]; then
+    if [ "${REGISTRY_URL}" = "" ]; then
+        echo "REGISTRY_URL not set"
+        exit 1
+    else 
+        /app/reg server -r ${REGISTRY_URL} -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} --clair ${CLAIR_SERVER} --asset-path /app/server
+    fi
+elif [ "${CLAIR}" = "false" ]; then
+    if [ "${REGISTRY_URL}" = "" ]; then
+        echo "REGISTRY_URL not set"
+        exit 1
+    else 
+        /app/reg server -r ${REGISTRY_URL} -u ${REGISTRY_USER} -p ${REGISTRY_PASSWORD} --asset-path /app/server
+    fi
+fi
