@@ -1,12 +1,18 @@
-FROM alpine:3.7
-ARG TF_VER
-RUN apk add --no-cache ca-certificates && \
-    apk add --no-cache --virtual .compress-tools upx && \
-    wget https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_amd64.zip -O /tmp/terraform.zip && \
-    unzip /tmp/terraform.zip -d /usr/bin/ && \
-    chmod +x /usr/bin/terraform && \
-    cd /usr/bin/ && \
-    upx --best terraform && \
-    rm -f /tmp/terraform.zip && \
-    apk del .compress-tools
-CMD ["/bin/sh"]
+ARG TF_VERSION
+FROM hashicorp/terraform:${TF_VERSION}
+ARG ANSIBLE_PLUGIN
+ENV PLUGINS_DIR=/root/.terraform.d/plugins \
+    ANSIBLE_PLUGIN=${ANSIBLE_PLUGIN}
+RUN apk add --no-cache \
+    curl \
+    git \
+    upx && \
+    cd /bin/ && \
+    upx --ultra-brute terraform && \
+    mkdir -p $PLUGINS_DIR && \
+    cd $PLUGINS_DIR && \
+    wget https://github.com/radekg/terraform-provisioner-ansible/releases/download/v${ANSIBLE_PLUGIN}/terraform-provisioner-ansible-linux-amd64_v${ANSIBLE_PLUGIN} -O $PLUGINS_DIR/terraform-provisioner-ansible_v${ANSIBLE_PLUGIN} && \
+    chmod +x $PLUGINS_DIR/terraform-provisioner-ansible_v${ANSIBLE_PLUGIN} && \
+    upx --ultra-brute terraform-provisioner-ansible_v${ANSIBLE_PLUGIN} && \
+    apk del upx && \
+    rm -rf /var/cache/apk/* /tmp/* 
