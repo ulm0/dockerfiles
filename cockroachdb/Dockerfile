@@ -1,6 +1,6 @@
-FROM alpine:edge
+FROM alpine
 ARG DB_VER
-ENV DB_VER=${DB_VER:-v1.1.6}
+ENV DB_VER=${DB_VER:-v2.1.3}
 RUN wget --quiet https://binaries.cockroachdb.com/cockroach-${DB_VER}.linux-musl-amd64.tgz -O /tmp/cockroach.tgz && \
     tar xvzf /tmp/cockroach.tgz --strip 1 && \
     apk add --no-cache file upx && \
