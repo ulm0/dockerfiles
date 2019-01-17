@@ -56,7 +56,7 @@ RUN apk -U upgrade \
  && apk del build-dependencies \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
-COPY rootfs /
+COPY rootfs/ /
 
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 

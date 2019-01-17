@@ -1,0 +1,5 @@
+IMAGES=$(ls -d */|sed "s|/||")
+for IMAGE in $IMAGES; do
+  echo -e "\033[1mBuilding \033[32m${IMAGE}\033[0m"
+ /kaniko/executor --context $CI_PROJECT_DIR/$IMAGE --dockerfile $CI_PROJECT_DIR/$IMAGE/Dockerfile --destination $CI_REGISTRY_IMAGE/$IMAGE
+done
