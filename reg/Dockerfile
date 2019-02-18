@@ -1,6 +1,6 @@
 FROM alpine
 ENV ARCH=amd64 \
-    VERSION=0.15.6 \
+    VERSION=0.16.0 \
     CLAIR=false \
     CLAIR_SERVER="" \
     REGISTRY_URL="" \
