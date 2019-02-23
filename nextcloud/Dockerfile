@@ -16,22 +16,24 @@ ENV UID=991 GID=991 \
 
 RUN apk -U upgrade \
  && apk add -t build-dependencies \
-    gnupg \
-    tar \
-    build-base \
     autoconf \
     automake \
-    pcre-dev \
+    build-base \
+    gnupg \
     libtool \
+    pcre-dev \
     samba-dev \
+    tar \
  && apk add \
-    libressl \
     ca-certificates \
+    libressl \
     libsmbclient \
-    tzdata \
     php7-imagick \
+    php7-xdebug \
+    tzdata \
  && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
- && ln /usr/lib/php7/modules/imagick.so /usr/lib/php/extensions/no-debug-non-zts-20170718/imagick.so \
+ && ln -svf /usr/lib/php7/modules/imagick.so /usr/lib/php/extensions/no-debug-non-zts-20170718/imagick.so \
+ && ln -svf /usr/lib/php7/modules/xdebug.so  /usr/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so \
  && pecl install \
     smbclient \
     apcu \
