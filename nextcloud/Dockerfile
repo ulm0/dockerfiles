@@ -1,6 +1,6 @@
-FROM ulm0/nginx-php:7.2
+FROM wonderfall/nginx-php:7.2
 
-ARG NEXTCLOUD_VERSION=15.0.2
+ARG NEXTCLOUD_VERSION=15.0.4
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
@@ -59,7 +59,7 @@ RUN apk -U upgrade \
  && apk del build-dependencies \
  && rm -rf /var/cache/apk/* /tmp/* /root/.gnupg
 
-COPY rootfs/ /
+COPY rootfs /
 
 RUN chmod +x /usr/local/bin/* /etc/s6.d/*/* /etc/s6.d/.s6-svscan/*
 
