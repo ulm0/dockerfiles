@@ -1,6 +1,6 @@
 FROM wonderfall/nginx-php:7.2
 
-ARG NEXTCLOUD_VERSION=15.0.4
+ARG NEXTCLOUD_VERSION=15.0.5
 ARG GPG_nextcloud="2880 6A87 8AE4 23A2 8372  792E D758 99B9 A724 937A"
 
 ENV UID=991 GID=991 \
@@ -16,24 +16,19 @@ ENV UID=991 GID=991 \
 
 RUN apk -U upgrade \
  && apk add -t build-dependencies \
+    gnupg \
+    tar \
+    build-base \
     autoconf \
     automake \
-    build-base \
-    gnupg \
-    libtool \
     pcre-dev \
+    libtool \
     samba-dev \
-    tar \
  && apk add \
-    ca-certificates \
     libressl \
+    ca-certificates \
     libsmbclient \
-    php7-imagick \
-    php7-xdebug \
     tzdata \
- && echo "extension=imagick.so" > /php/conf.d/imagick.ini \
- && ln -svf /usr/lib/php7/modules/imagick.so /usr/lib/php/extensions/no-debug-non-zts-20170718/imagick.so \
- && ln -svf /usr/lib/php7/modules/xdebug.so  /usr/lib/php/extensions/no-debug-non-zts-20170718/xdebug.so \
  && pecl install \
     smbclient \
     apcu \
